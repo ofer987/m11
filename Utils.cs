@@ -2,37 +2,30 @@ using System.Text;
 
 namespace M11;
 
-public static class Utils
-{
-    public static void CreateFile(string path)
-    {
-        if (File.Exists(path))
-        {
+public static class Utils {
+    public static void CreateFile(string path) {
+        if (File.Exists(path)) {
             return;
         }
 
         File.Open(path, FileMode.Create);
     }
 
-    public static string ConvertToBase36(long input)
-    {
+    public static string ConvertToBase36(long input) {
         var i = 7;
         var sb = new StringBuilder();
         var remaining = input;
         var remainder = 0L;
 
-        while (i >= 0 && remaining > 0)
-        {
+        while (i >= 0 && remaining > 0) {
             remainder = remaining % 36;
             remaining = remaining / 36;
 
-            if (remainder >= 10)
-            {
+            if (remainder >= 10) {
                 char ch = ConvertNumberToLowerCaseCharacter(remainder);
                 sb.Append(ch);
             }
-            else
-            {
+            else {
                 sb.Append(remainder);
             }
 
@@ -41,8 +34,7 @@ public static class Utils
 
         var length = sb.Length;
 
-        for (i = length; i < 8; i += 1)
-        {
+        for (i = length; i < 8; i += 1) {
             sb.Append(0);
         }
 
@@ -55,8 +47,7 @@ public static class Utils
         return reversedResult;
     }
 
-    private static char ConvertNumberToLowerCaseCharacter(long input)
-    {
+    private static char ConvertNumberToLowerCaseCharacter(long input) {
         // a is 97
         // but input starts @ 10
         // So 10 will be 'a' or 97

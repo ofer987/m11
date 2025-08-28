@@ -3,8 +3,7 @@ using System.Text.Json;
 
 namespace M11;
 
-public class Program
-{
+public class Program {
     private static string BaseQueryParameter = "?auth=";
     private static string BaseAddress = "https://api.ensoconnect.com/prod/keycard";
     private static string FilePath = "results.cs.txt";
@@ -13,13 +12,11 @@ public class Program
 
     private static string ListingDisabled = "listing_disabled";
 
-    public static int Main(string[] args)
-    {
+    public static int Main(string[] args) {
         Utils.CreateFile(FilePath);
 
         Parallel.For(0, Size,
-            (j) =>
-            {
+            (j) => {
                 using var client = new HttpClient();
                 client.BaseAddress = new Uri(BaseAddress);
 
@@ -30,8 +27,7 @@ public class Program
 
                 var response = client.GetAsync(queryParameter).GetAwaiter().GetResult();
 
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
+                if (response.StatusCode != HttpStatusCode.OK) {
                     Console.WriteLine($"Finished executing {url}");
 
                     return;
@@ -53,8 +49,7 @@ public class Program
         return 0;
     }
 
-    private static string GetQueryParameter(string input)
-    {
+    private static string GetQueryParameter(string input) {
         return $"{BaseQueryParameter}{input}";
     }
 }
