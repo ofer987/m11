@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace M11;
 
@@ -26,22 +27,26 @@ public class Program
 
                 var queryParameter = GetQueryParameter(queryValue);
                 var url = $"{BaseAddress}{queryParameter}";
-                var response = client.GetFromJsonAsync<KeyCard>(queryParameter).GetAwaiter().GetResult();
 
-                if (response is null || response.View != "checked_in") {
+                var response = client.GetAsync(queryParameter).GetAwaiter().GetResult();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
                     Console.WriteLine($"Finished executing {url}");
 
                     return;
                 }
 
-                // if (response.View != "checked_in")
-                // {
-                //     Console.WriteLine($"Finished executing {url}");
-                //
-                //     return;
-                // }
+                var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var keyCard = JsonSerializer.Deserialize<KeyCard>(body);
 
-                Console.WriteLine($"{url} is good!");
+                if (keyCard is null || keyCard.View != "checked_in") {
+                    Console.WriteLine($"Finished executing {url}");
+
+                    return;
+                }
+
+                Console.WriteLine($"{url} is good! And value is {keyCard.View}");
                 File.AppendAllText(FilePath, $"{url}\n");
             });
 
