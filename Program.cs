@@ -11,6 +11,8 @@ public class Program
 
     private static long Size = 2_821_109_907_456;
 
+    private static string ListingDisabled = "listing_disabled";
+
     public static int Main(string[] args)
     {
         Utils.CreateFile(FilePath);
@@ -38,7 +40,7 @@ public class Program
                 var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var keyCard = JsonSerializer.Deserialize<KeyCard>(body);
 
-                if (keyCard is null || keyCard.View != "checked_in") {
+                if (keyCard is null || keyCard.View == ListingDisabled) {
                     Console.WriteLine($"Finished executing {url}");
 
                     return;
